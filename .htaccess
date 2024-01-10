@@ -1,11 +1,5 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    
-    # Đảm bảo rằng HTTPS được bật
-    RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-    # Chuyển hướng các yêu cầu không phải trong thư mục "public"
-    RewriteCond %{REQUEST_URI} !^/public
-    RewriteRule ^(.*)$ public/$1 [L]
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
