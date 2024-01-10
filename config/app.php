@@ -163,12 +163,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Package Service Providers...
-         */
-        // Debugbar
-
-        Barryvdh\Debugbar\ServiceProvider::class,
-        /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
@@ -192,7 +186,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // ...
-        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     ])->toArray(),
 
 ];
