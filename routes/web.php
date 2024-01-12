@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\ContactContrller;
 use App\Http\Controllers\Admin\OrderContrller;
 use App\Http\Controllers\Admin\BlogsController;
 use App\Http\Controllers\Admin\SessionController as AdminSessionController;
-
+use App\Http\Controllers\RegisteredStoreController;
 use App\Http\Controllers\Client\ClientController;
 /*
 |--------------------------------------------------------------------------
@@ -38,10 +38,12 @@ Route::get('quen-mat-khau', [ClientController::class, 'forgetPassword'])->name('
 Route::post('quen-mat-khau', [ClientController::class, 'SentPassword'])->name('SentPassword');
 Route::get('doi-mat-khau', [ClientController::class, 'ChangePassword'])->name('ChangePassword');
 Route::post('doi-mat-khau', [ClientController::class, 'SentChangePassword'])->name('SentChangePassword');
+Route::get('registered/store', [RegisteredStoreController::class, 'create']);
+Route::post('registered/store', [RegisteredStoreController::class, 'save']);
 
 Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(function () {
     Route::get('/', [DashboadContrller::class, 'index'])->name('dashboad');
-    //    
+    //
     Route::middleware('AdminLogin')->group(function () {
         Route::get('logout', [AdminSessionController::class, 'logout'])->name('logout');
         Route::get('profile', [UserController::class, 'proFile'])->name('profile');
@@ -50,7 +52,7 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
         Route::get('config', [ConfigController::class, 'config'])->name('config');
         Route::post('config', [ConfigController::class, 'updateConfig'])->name('config');
     });
-    // category    
+    // category
     Route::name('category.')->middleware('AdminLogin')->prefix('category/')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index')->middleware('can:XEM-LOAI-SAN-PHAM');
         Route::get('create', [CategoryController::class, 'create'])->name('create')->middleware('can:THEM-LOAI-SAN-PHAM');
@@ -112,7 +114,7 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
             Route::get('delete/{id}', [RoleController::class, 'delete'])->name('delete')->middleware('can:XOA-CHUC-VU');
         });
     });
-   
+
     Route::name('cate_blog.')->prefix('cate_blog/')->group(function () {
         Route::get('', [CategoriBlogController::class, 'index'])->name('index')->middleware('can:XEM-LOAI-BAI-VIET');
         Route::get('create', [CategoriBlogController::class, 'create'])->name('create')->middleware('can:THEM-LOAI-BAI-VIET');
@@ -166,7 +168,7 @@ Route::post('checkout', [ClientController::class, 'checkout'])->middleware('clie
 Route::name('api.')->middleware('ApiclientLogin')->prefix('api/')->group(function () {
     // id sản phẩm|| có sô lượng sp
     Route::post('add-to-cart/{product_id}', [ClientController::class, 'addCart'])->name('addCart');
-    // id sản phẩm|| sl sản phẩm mặc định là 1 
+    // id sản phẩm|| sl sản phẩm mặc định là 1
     Route::get('add-cart/{product_id}', [ClientController::class, 'addCart'])->name('addCart');
     Route::get('remove-cart/{product_id}', [ClientController::class, 'removeCart'])->name('removeCart');
 });

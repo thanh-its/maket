@@ -42,6 +42,12 @@ class RoleSeed extends Seeder
                 'desc' => "Tài khoản của admin",
                 'status' => 1,
             ]);
+
+            Roles::create([
+                'name' => "Người bán hàng",
+                'desc' => "Tài khoản của người bán hàng",
+                'status' => 1,
+            ]);
             $role->permissions()->attach($data);
             DB::commit();
         } catch (Exception $exception) {

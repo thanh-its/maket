@@ -9,9 +9,9 @@
 @endsection
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Danh sách nhóm khách hàng</h1>
+    <h1 class="h3 mb-0 text-gray-800">Danh sách gian hàng</h1>
     @can('THEM-NHOM-KHACH-HANG')
-    <a href="{{route('cp-admin.groups.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Thêm nhóm khách hàng</a>
+    <a href="{{route('cp-admin.groups.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Thêm gian hàng</a>
     @endcan
 </div>
 
@@ -35,16 +35,16 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tên nhóm</th>
-                        <th>Sô lượng khách hàng</th>
+                        <th>Tên cửa hàng</th>
+                        <th>Chủ cửa hàng</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Tên nhóm</th>
-                        <th>Sô lượng khách hàng</th>
+                        <th>Tên cửa hàng</th>
+                        <th>Chủ cửa hàng</th>
                         <th>Hành động</th>
                     </tr>
                 </tfoot>
@@ -134,5 +134,24 @@
             $("form[name='fillter_cate']").trigger("submit");
         });
     });
+
+
+    function drawHouse() {
+        let house = '';
+
+        // Vẽ mái nhà
+        for (let i = 0; i < 5; i++) {
+            house += ' '.repeat(5 - i) + '*'.repeat(2 * i + 1) + '\n';
+        }
+
+        // Vẽ phần thân nhà
+        for (let i = 0; i < 3; i++) {
+            house += '*'.repeat(11) + '\n';
+        }
+
+        // In kết quả
+        console.log(house);
+
+    }
 </script>
 @endsection
