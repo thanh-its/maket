@@ -115,6 +115,11 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
         });
     });
 
+    //Seller
+    Route::name('seller.')->middleware('AdminLogin')->prefix('seller/')->group(function () {
+        Route::get('', [UserController::class, 'getSeller'])->name('index')->middleware('can:XEM-NHAN-VIEN');
+    });
+
     Route::name('cate_blog.')->prefix('cate_blog/')->group(function () {
         Route::get('', [CategoriBlogController::class, 'index'])->name('index')->middleware('can:XEM-LOAI-BAI-VIET');
         Route::get('create', [CategoriBlogController::class, 'create'])->name('create')->middleware('can:THEM-LOAI-BAI-VIET');

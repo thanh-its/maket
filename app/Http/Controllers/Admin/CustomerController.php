@@ -31,12 +31,11 @@ class CustomerController extends Controller
         return redirect()->back();
     }
     public function update(Request $request ,$id)
-    {   
+    {
         $customer = User::where('is_admin',false)->where('id',$id)->first();
         $this->validate(request(),[
             'address'=>'required|min:3|max:200',
             'status' => 'required|integer|min:0|max:1',
-            'group_user' => 'required|integer|min:1',
         ],
         [
             'address_detail.required'=>'Bạn chưa nhập địa chỉ',

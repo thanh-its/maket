@@ -1,5 +1,5 @@
 @extends('admin.master')
-@section('title', "Khách hàng")
+@section('title', "Nhân viên")
 @section('style')
 <style>
     .sreach {
@@ -9,10 +9,7 @@
 @endsection
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-@can('THEM-KHACH-HANG')
-    <h1 class="h3 mb-0 text-gray-800">Danh sách  khách hàng</h1>
-    @endcan
-    <!-- <a href="{{route('cp-admin.customers.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Thêm nhóm khách hàng </a> -->
+    <h1 class="h3 mb-0 text-gray-800">Danh sách đối tác bán hàng </h1>
 </div>
 
 <div class="card shadow mb-4 ">
@@ -22,16 +19,10 @@
                 <input type="hidden" class="form-control bg-light border-0 small sreach" name="page" value="{{request('page') ? request('page') : '1' }}" aria-label="Search" aria-describedby="basic-addon2">
                 <div class="d-flex justify-content-between w-100">
                     <input type="text" class="form-control bg-light border-0 small sreach m-2" name="search" placeholder="Tìm danh tên ..." value="{{request('search') ? request('search') : '' }}" aria-label="Search" aria-describedby="basic-addon2">
-                    <select id="inputState" name="group_user" class="form-control m-2">
-                        <option value=""  {{request("group_user") ? "selected" : "" }}>Tất cả nhóm...</option>
-                        @foreach($GroupUsers as $GroupUser)
-                        <option value="{{$GroupUser->id}}" {{request("group_user") == $GroupUser->id ? "selected" : "" }}>{{$GroupUser->name }}</option>
-                        @endforeach
-                    </select>
                     <select id="inputState" name="status" class="form-control m-2">
-                    <option value=""  {{request("status")=="" ? "selected" : "" }}>Tất cả trang thái</option>
-                        <option value="1"  {{request("status")== 1 ? "selected" : "" }}>Đang hoạt động</option>
-                        <option value="2"  {{request("status") == 2 ? "selected" : "" }}>Ngưng hoạt động</option>
+                        <option value="" {{request("status")=="" ? "selected" : "" }}>Tất cả trang thái</option>
+                        <option value="1" {{request("status")== 1 ? "selected" : "" }}>Đang hoạt động</option>
+                        <option value="2" {{request("status") == 2 ? "selected" : "" }}>Ngưng hoạt động</option>
                     </select>
                     <button class="btn btn-primary m-2" id="fillter_pro" type="submit">
                         <i class="fas fa-search fa-sm"></i>
@@ -48,8 +39,9 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>E-mail</th>
-
+                        <th>Chức vụ</th>
                         <th>Điện thoại</th>
+                        <th>Cửa hàng </th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -59,7 +51,9 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>E-mail</th>
+                        <th>Nhóm</th>
                         <th>Điện thoại</th>
+                        <th>Cửa hàng </th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -67,16 +61,18 @@
                 <tbody>
                     @foreach( $users as $user)
                     <tr id="pro{{ $user->id }}">
-                    <td>{{ $user->id }}</td>
+                        <td>{{ $user->id }}</td>
                         <td>{{ $user->fullname }}</td>
                         <td>{{ $user->email  }}</td>
+                        <td>{{ $user->roles->name ?? ""  }}</td>
                         <td>{{ $user->phone }}</td>
+                        <td>{{ $user->groupUser->name ?? ''  }}</td>
                         <td><span style="" class="btn {{$user->status==1?'btn-primary':'btn-danger'}} w-100">{{ App\Common\Constants::STATUS_PRODUCTS[$user->status] }}</span></td>
                         <td>
-                        @can('SUA-KHACH-HANG')
-                            <a href="{{route('cp-admin.customers.edit',[ 'id' => $user->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
+                            @can('SUA-NHAN-VIEN')
+                            <a href="{{route('cp-admin.user.edit',[ 'id' => $user->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
                             @endcan
-                            @can('XOA-KHACH-HANG')
+                            @can('XOA-NHAN-VIEN')
                             <a class="btn-lg" onclick="deleteCate({{ $user->id}})"><i class="fas fa-trash"></i></a>
                             @endcan
                         </td>
@@ -110,7 +106,7 @@
 @endif
 <script>
     function deleteCate(id) {
-        const url = '/cp-admin/customers/delete/' + id;
+        const url = '/cp-admin/user/delete/' + id;
         // console.log(url);
         swal({
                 title: "Bạn có chắc không?",
@@ -125,12 +121,12 @@
                         type: "get",
                         url: url,
                         success: function(res) {
-                            //console.log(res.status)
+                            console.log(res)
                             if (res.status == 200) {
                                 swal("Tệp của bạn đã bị xóa!", {
                                     icon: "success",
                                 }).then(function() {
-                                    $("#pro" + id).remove();
+                                    res.logout == true ? location.reload() : $("#pro" + id).remove();
                                 });
                             } else if (res.status == 401) {
                                 swal(res.message, {
