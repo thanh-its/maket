@@ -22,7 +22,7 @@
                 <input type="hidden" class="form-control bg-light border-0 small sreach" name="page" value="{{request('page') ? request('page') : '1' }}" aria-label="Search" aria-describedby="basic-addon2">
                 <div class="d-flex justify-content-between w-100">
                     <input type="text" class="form-control bg-light border-0 small sreach m-2" name="search" placeholder="Tìm danh tên ..." value="{{request('search') ? request('search') : '' }}" aria-label="Search" aria-describedby="basic-addon2">
-                    <select id="inputState" name="group_user" class="form-control m-2">   
+                    <select id="inputState" name="group_user" class="form-control m-2">
                         <option value=""  {{request("group_user") ? "selected" : "" }}>Tất cả nhóm...</option>
                         @foreach($GroupUsers as $GroupUser)
                         <option value="{{$GroupUser->id}}" {{request("group_user") == $GroupUser->id ? "selected" : "" }}>{{$GroupUser->name }}</option>
@@ -48,7 +48,7 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>E-mail</th>
-                        <th>Nhóm</th>
+
                         <th>Điện thoại</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
@@ -59,7 +59,6 @@
                         <th>ID</th>
                         <th>Tên</th>
                         <th>E-mail</th>
-                        <th>Nhóm</th>
                         <th>Điện thoại</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
@@ -71,7 +70,6 @@
                     <td>{{ $user->id }}</td>
                         <td>{{ $user->fullname }}</td>
                         <td>{{ $user->email  }}</td>
-                        <td>{{ $user->groupUser->name  }}</td>
                         <td>{{ $user->phone }}</td>
                         <td><span style="" class="btn {{$user->status==1?'btn-primary':'btn-danger'}} w-100">{{ App\Common\Constants::STATUS_PRODUCTS[$user->status] }}</span></td>
                         <td>

@@ -60,14 +60,6 @@
                         @error('status')<span class="text-danger">{{$message}}</span>@enderror
                     </div>
                     <div class="col-sm-6">
-                    <label for="slugCategories">Nhóm khách hàng<span class="text-danger">(*)</span></label>
-                        <select id="inputState" name="group_user"  class="custom-select">
-                            @foreach($GroupUsers as $GroupUser)
-                            <option value="{{$GroupUser->id}}" {{$users->status == $GroupUser->id ? "selected" : "" }}>{{$GroupUser->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('group_user')<span class="text-danger">{{$message}}</span>@enderror
-                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-user btn-block">Lưu lại</button>
             </form>
