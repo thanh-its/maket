@@ -15,11 +15,13 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('number_sale');
+            $table->string('code');
+            $table->string('count');
             $table->string('discount_percent');
             $table->string('active');
-            $table->time('time_start');
-            $table->time('time_end');
+            $table->string('start_time')->nullable()->default(null);
+            $table->string('end_time')->nullable()->default(null);
+            $table->foreignId('users_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

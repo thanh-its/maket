@@ -16,40 +16,12 @@ class SaleSeeder extends Seeder
     public function run()
     {
         DB::table('sales')->insert([
-            [
-                'number_sale' => '20',
+            [   'code' => 'MBGD20',
+                'count' => '20',
                 'discount_percent' => '10',
                 'active' => '0',
                 'time_start' => '10',
                 'time_end' => '12'
-            ],
-            [
-                'number_sale' => '10',
-                'discount_percent' => '13',
-                'active' => '1',
-                'time_start' => '16',
-                'time_end' => '17'
-            ],
-            [
-                'number_sale' => '30',
-                'discount_percent' => '15',
-                'active' => '0',
-                'time_start' => '18',
-                'time_end' => '19'
-            ],
-            [
-                'number_sale' => '20',
-                'discount_percent' => '20',
-                'active' => '0',
-                'time_start' => '09',
-                'time_end' => '10'
-            ],
-            [
-                'number_sale' => '12',
-                'discount_percent' => '25',
-                'active' => '0',
-                'time_start' => '19',
-                'time_end' => '20'
             ],
         ]);
     }
