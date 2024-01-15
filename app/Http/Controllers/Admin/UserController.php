@@ -16,12 +16,25 @@ class UserController extends Controller
     public function index()
     {
         $roles = Roles::where('id', '!=', 1)->orderBy('id', 'DESC')->get();
-        $users = User::where('is_admin', true)
+        $users = User::where('is_admin', true)->where('role_id', '!=', 3)
             ->filter(request(['search', 'role_id', 'status']))
             ->orderBy('id', 'DESC')->Paginate(15);
         $users->load('roles');
         return view('admin.pages.users.index', compact('users', 'roles'));
     }
+    public function getSeller()
+    {
+        $users = User::with([
+            'groupUser',
+            'roles'
+        ])
+            ->where('is_admin', true)->where('role_id', 3)
+            ->filter(request(['search', 'role_id', 'status']))
+            ->orderBy('id', 'DESC')->Paginate(15);
+
+        return view('admin.pages.sellers.index', compact('users'));
+    }
+
     public function create()
     {
         $roles = Roles::where('id', '!=', 1)->orderBy('id', 'DESC')->get();
@@ -70,11 +83,11 @@ class UserController extends Controller
             ]
         );
 
-        // lưu ảnh 
+        // lưu ảnh
         $pathAvatar = $request->file('avatar')->store('public/users/avatar');
         $pathAvatar = str_replace("public/", "", $pathAvatar);
 
-        
+
 
         $data = request(['fullname', 'phone', 'address', 'email', 'role_id', 'status']);
         // tạo mật khẩu cho tài khoản
@@ -82,7 +95,7 @@ class UserController extends Controller
         $data['avatar'] = $pathAvatar;
         $data['password'] = bcrypt( $data['passwordNew']); // mã hóa mật khẩu
         $data['is_admin'] = true;
-   
+
         User::create($data);
 
         Mail::to($request->email)->send(new NotifyMail($data));
@@ -141,11 +154,11 @@ class UserController extends Controller
             ]
         );
         // tìm user theo id
-        
+
         // kiểm tra xem request ảnh lên không
         $pathAvatar = "";
         if ($request->file('avatar') != null) { // có giửi ảnh lên
-           
+
             if (file_exists('storage/' . $user->avatar)) {  // kiểm tra xem file ảnh cũ có tồn tại trong forder ko
                 unlink('storage/' . $user->avatar); // nếu có thì xóa ảnh cũ trong file store
             }
@@ -180,7 +193,7 @@ class UserController extends Controller
                     'status' => "401"
                 ]);
             }
-            
+
             $user->delete();
             $logout=false;
             if($id==auth()->user()->id){
