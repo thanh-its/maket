@@ -38,7 +38,7 @@ class ProductSeeder extends Seeder
                 'status' => rand(0, 1),
                 'category_id' => Category::all()->random()->id,
                 'supplier_id' => Supplier::all()->random()->id,
-                'users_id'=>User::all()->random()->id,
+                'users_id'=> optional(User::where('role_id', 3)->inRandomOrder()->first())->id,
                 'slug' => $slug,
                 'Description' => $faker->text(100),
                 'origin_id'=>Origin::all()->random()->id,

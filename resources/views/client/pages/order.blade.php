@@ -12,7 +12,7 @@
                             <thead>
                                 <tr>
                                     <th class="">Đơn hàng</th>
-                                    <th>Tình trạng</th>
+
                                     <th>Ngày</th>
                                     <th>Hành động</th>
                                 </tr>
@@ -24,14 +24,11 @@
                                         <span>{{$Order->id}}</span>
                                     </td>
                                     <td class="shoping__cart__item__close ">
-                                   <span> {{ App\Common\Constants::STATUS_ORDER[$Order->status] }}</span>
-                                    </td>
-                                    <td class="shoping__cart__item__close ">
                                    <span> {{$Order->created_at}}</span>
                                     </td>
-                              
+
                                     <td class="shoping__cart__item__close d-flex justify-content-center">
-                                       
+
                                         <a type="button"class="btn btn-primary" href="{{route('order_detail',['id'=>$Order->id])}}">Xem</a>
                                     </td>
                                 </tr>
@@ -41,7 +38,7 @@
                     </div>
                 </div>
             </div>
-        
+
         </div>
     </section>
     <!-- Shoping Cart Section End -->

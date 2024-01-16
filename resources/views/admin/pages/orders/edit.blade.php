@@ -35,6 +35,7 @@
                         <th>Sản phẩm </th>
                         <th>Giá</th>
                         <th>Số lượng</th>
+                        <th>Trạng thái</th>
                         <th>Số tiền</th>
                     </tr>
                 </thead>
@@ -43,19 +44,31 @@
                     <th>Sản phẩm </th>
                     <th>Giá</th>
                     <th>Số lượng</th>
+                    <th>Trạng thái</th>
                     <th>Số tiền</th>
                     </tr>
                 </tfoot>
+                @php $totalPrice = 0 ; @endphp
                 @foreach($Orders->order_detail as $Order)
+                    @if($Order->users_id == auth()->user()->id)
+                        @php $totalPrice += $Order->price * $Order->quantity ; @endphp
                 <tbody>
                     <td>{{$Order->id}}</td>
                     <td>{{$Order->name}}</td>
                     <td> {{ number_format($Order->price, 0, ',', '.') . " VNĐ"   }}</td>
                     <td>{{$Order->quantity}}</td>
+                    <td>
+                        <select class="custom-select" name="status" id="statusSelect0-{{$Order->id}}" onchange="changeStatus({{$Order->id}})">
+                            @foreach( App\Common\Constants::STATUS_ORDER as $key => $status)
+                                <option value="{{$key}}" {{ $Order->status == $key ? "selected": "" }}>{{$status}}</option>
+                            @endforeach
+                        </select>
+                    </td>
                     <td> {{ number_format($Order->price * $Order->quantity, 0, ',', '.') . " VNĐ"   }}</td>
 
                     </tr>
                 </tbody>
+                    @endif
                 @endforeach
             </table>
         </div>
@@ -65,15 +78,15 @@
 
     </div>
 </div>
+
 <div class=" col-12 d-flex justify-content-between">
 <div class="card col-7 d-flex justify-content-between">
     <div class="col-12">
         <div class="shoping__checkout">
             <h5>Hóa đơn</h5>
             <ul>
-                <li>Tổng tiền thanh toán: <span style="  color:red;">{{ number_format($totalMoney, 0, ',', '.') . " VNĐ"   }}</span></li>
+                <li>Tổng tiền thanh toán: <span style="  color:red;">{{ number_format($totalPrice, 0, ',', '.') . " VNĐ"   }}</span></li>
                 <li>Phương thức thanh toán: <span style="  color:red;">Thanh toán khi nhân hàng</span></li>
-                <li>Trạng thái: <span style="  color:red;">{{ App\Common\Constants::STATUS_ORDER[$Orders->status] }}</span></li>
             </ul>
         </div>
         <div class="shoping__checkout">
@@ -90,39 +103,11 @@
 
     </div>
 </div>
-<div class="card col-5 d-flex justify-content-between">
-    <div class="col-12">
-        <div class="shoping__checkout">
-            <form class="user" action="{{route('cp-admin.orders.update',[ 'id' => $Orders->id ])}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group row">
-                    <div class="col-sm-12">
-                        <label for="slugCategories">Trạng thái</label>
-                        <select class="custom-select" name="status" id="inputGroupSelect01">
-                            @foreach( App\Common\Constants::STATUS_ORDER as $key => $status)
-                            <option value="{{$key}}" {{ $Orders->status == $key ? "selected": "" }}>{{$status}}</option>
-                            @endforeach
-                        </select>
-                        @error('status')
-                        <span class="text-danger">
-                            {{$message}}
-                        </span>
-                        @enderror
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block">Lưu lại</button>
-            </form>
-        </div>
-        
-    </div>
-    <div class="col-6">
-
-    </div>
-</div>
+@csrf
 </div>
 <style>
     ul li span{
-      
+
     }
 </style>
 
@@ -136,15 +121,54 @@
 </script>
 @endif
 <script>
-    function deleteCate(id) {
-        const url = '/cp-admin/cate_blog/delete/' + id;
+    function changeStatus(id) {
+        const url = '/cp-admin/orders/update/' + id;
+        let status = $("#statusSelect0-"+id).val();
+        let _token = $("input[name=_token]").val();
+        let data = { status, _token };
         swal({
                 title: "Bạn có chắc không?",
-                text: "Sau khi bị xóa, bạn sẽ không thể khôi phục tệp này! ",
+                text: " ",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: data,
+                        success: function(res) {
+                            console.log(res.status)
+                            if (res.status == 200) {
+                                swal("Tệp của bạn đã được thay đổi!", {
+                                    icon: "success",
+                                }).then(function() {
+                                    $("#cate" + id).remove();
+                                });
+                            } else if (res.status == 401) {
+                                swal(res.message, {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+
+                } else {
+                    swal("Tệp của bạn an toàn!!");
+                }
+            });
+    }
+    function deleteCate(id) {
+        const url = '/cp-admin/cate_blog/delete/' + id;
+        swal({
+            title: "Bạn có chắc không?",
+            text: "Sau khi bị xóa, bạn sẽ không thể khôi phục tệp này! ",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({

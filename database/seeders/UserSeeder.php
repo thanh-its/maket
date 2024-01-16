@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        // admin 
+        // admin
         foreach(range(1, 1) as $index){
             $name = $faker->name();
             User::create([
@@ -48,6 +48,23 @@ class UserSeeder extends Seeder
                 'status' => 1,
                 'is_admin'=> 0,
                 'role_id'=>1,
+                'group_user'=>GroupUser::all()->random()->id
+            ]);
+        }
+        // bán hàng
+        foreach(range(1, 4) as $index){
+            $name = $faker->name();
+            User::create([
+                'avatar'=>"https://webmaudep.com/demo/thucpham/tp01/images/product-5.jpg",
+                'fullname'=>$name,
+                'address'=> $faker->address(),
+                'address_detail'=> $faker->address(),
+                'phone' => $faker->phoneNumber(),
+                'email'=>$faker->email(),
+                'password'=>'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password,
+                'status' => 1,
+                'is_admin'=> 1,
+                'role_id'=>3,
                 'group_user'=>GroupUser::all()->random()->id
             ]);
         }

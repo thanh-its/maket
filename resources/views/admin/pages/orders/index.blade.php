@@ -32,30 +32,35 @@
                 <thead>
                     <tr>
                     <th>ID</th>
-                        <th>Trạng thái </th>
-                        <th>Ngày</th>
+                        <th>Sản phẩm </th>
+                        <th>Giá </th>
+                        <th>Trạng thái</th>
+                        <th>Thời gian đặt</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tfoot>
-                    <tr>
-                         <th>ID</th>
-                        <th>Trạng thái </th>
-                        <th>Ngày</th>
-                        <th>Hành động</th>
-                    </tr>
+                <th>ID</th>
+                <th>Sản phẩm </th>
+                <th>Giá </th>
+                <th>Trạng thái</th>
+                <th>Thời gian đặt</th>
+                <th>Hành động</th>
+                </tr>
                 </tfoot>
                 <tbody>
                     @foreach( $Orders as $Order)
                     <tr id="cate{{ $Order->id }}">
                     <td>{{ $Order->id }}</td>
+                        <td>{{ $Order->name }}</td>
+                        <td> {{ number_format($Order->price, 0, ',', '.') . " VNĐ"   }}</td>
                         <td>{{ App\Common\Constants::STATUS_ORDER[$Order->status] }}</td>
                         <td>{{ $Order->created_at }}</td>
                         <td>
                         @can('SUA-DON-HANG')
-                            <a href="{{route('cp-admin.orders.edit',[ 'id' => $Order->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{{route('cp-admin.orders.edit',[ 'id' => $Order->order_id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
                             @endcan
-                            {{-- <a class="btn-lg" onclick="deleteCate({{ $contact->id}})"><i class="fas fa-trash"></i></a> --}} 
+                            {{-- <a class="btn-lg" onclick="deleteCate({{ $contact->id}})"><i class="fas fa-trash"></i></a> --}}
                         </td>
                     </tr>
                     @endforeach

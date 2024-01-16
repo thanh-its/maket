@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CategoriBlogController;
 use App\Http\Controllers\Admin\ContactContrller;
 use App\Http\Controllers\Admin\OrderContrller;
 use App\Http\Controllers\Admin\BlogsController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SessionController as AdminSessionController;
 use App\Http\Controllers\RegisteredStoreController;
 use App\Http\Controllers\Client\ClientController;
@@ -166,7 +167,7 @@ Route::get('order', [ClientController::class, 'order'])->middleware('clientLogin
 Route::get('order/{id}', [ClientController::class, 'order_detail'])->middleware('clientLogin')->name('order_detail');
 Route::post('update-carts', [ClientController::class, 'updateCarts'])->middleware('clientLogin')->name('updateCarts');
 Route::post('checkout', [ClientController::class, 'checkout'])->middleware('clientLogin')->name('checkout');
-
+Route::post('api/orders/update/{id}', [OrderContrller::class, 'update'])->middleware('clientLogin');
 
 
 // nhớ check user quyền đăng nhập người dùng
