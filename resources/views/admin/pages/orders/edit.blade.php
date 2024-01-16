@@ -51,7 +51,9 @@
                 @php $totalPrice = 0 ; @endphp
                 @foreach($Orders->order_detail as $Order)
                     @if($Order->users_id == auth()->user()->id)
+                    @if($Order->users_id == auth()->user()->id && $Order->status != 6)
                         @php $totalPrice += $Order->price * $Order->quantity ; @endphp
+                        @endif
                 <tbody>
                     <td>{{$Order->id}}</td>
                     <td>{{$Order->name}}</td>

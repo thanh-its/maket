@@ -16,11 +16,12 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->string('count');
+            $table->string('number_sale');
             $table->string('discount_percent');
             $table->string('active');
-            $table->string('start_time')->nullable()->default(null);
-            $table->string('end_time')->nullable()->default(null);
+            $table->text('products_id');
+            $table->string('time_start')->nullable()->default(null);
+            $table->string('time_end')->nullable()->default(null);
             $table->foreignId('users_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

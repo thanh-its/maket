@@ -43,6 +43,10 @@
                         <h6 class="collapse-header"> Sản phẩm :</h6>
                         <a class="collapse-item" href="{{route('cp-admin.products.index')}}">Danh sách sản phẩm</a>
                     @endcan
+                    @can('XEM-SAN-PHAM')
+                    <h6 class="collapse-header"> Voucher :</h6>
+                    <a class="collapse-item" href="{{route('cp-admin.voucher.index')}}">Danh sách voucher</a>
+                @endcan
                     @can('XEM-NHA-PHAN-PHOI')
                         <h6 class="collapse-header"> Nhà phân phối :</h6>
                         <a class="collapse-item" href="{{route('cp-admin.supplier.index')}}">Danh sách nhà phân phối</a>
