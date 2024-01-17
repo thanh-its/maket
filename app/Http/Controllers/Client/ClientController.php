@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\config;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
@@ -108,6 +109,13 @@ class ClientController extends Controller
     }
     public function addCart(Request $request, $product_id)
     {
+        $config= config::first();
+        if($config->market_status == 0){
+            return response()->json([
+                'message' => "Xin lỗi phiên chợ đã đóng ",
+                'status' => "error"
+            ]);
+        }
         $Product = Product::where('id', $product_id)->where('status', 1)->first();
         if($Product->quantity <= 0){
             return response()->json([

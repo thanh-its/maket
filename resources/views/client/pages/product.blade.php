@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
-         
+
                     <div class="product__details__text">
                         <h3>{{$Product->namePro}}</h3>
                         <div class="product__details__rating">
@@ -56,7 +56,11 @@
                                 </div>
                             </div>
                         </div>
+                        @if($config->market_status == 0)
+                        <button type="button" class="btn btn-danger">Xin lỗi chợ đã đóng</button>
+                        @else
                         <button class="primary-btn" onclick="addToCart({{$Product->id}})" {{$Product->quantity <= 0 ? "disabled" : "" }}>{{$Product->quantity <= 0 ? "Sản phẩm đã hết hàng" : "Thêm vào giỏ hàng" }}</button>
+                        @endif
                         <ul>
                             <li><b>Số lượng sản phẩm </b> <span>{{$Product->quantity}} SP</span></li>
                             <li><b>Nhà cung cấp</b> <span>{{$Product->supplier->nameSupplier}}</span></li>
@@ -65,7 +69,7 @@
                             <li><b>Hoàn tiền </b> <span><samp>100%</samp> Cho mọi đơn hàng</span></li>
                         </ul>
                     </div>
-  
+
             </div>
             <div class="col-lg-12">
                 <div class="product__details__tab">

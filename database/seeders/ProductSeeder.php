@@ -29,11 +29,14 @@ class ProductSeeder extends Seeder
         foreach(range(1,50) as $index){
             $name = $faker->name();
             $slug =  $this->createSlug($name);
+            $cost = rand(3000, 10000000);
+            $price = $cost + rand(3000, 10000000);
             DB::table('products')->insert([
                 'namePro' => $name,
                 'image' => 'images/products/product-'.rand(1,12).'.jpg',
                 'quantity' => rand(1, 1000),
-                'price' => rand(3000, 10000000),
+                'price' => $price,
+                'cost' => $cost,
                 'discounts'=>rand(0, 100),
                 'status' => rand(0, 1),
                 'category_id' => Category::all()->random()->id,

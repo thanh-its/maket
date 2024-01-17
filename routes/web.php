@@ -52,6 +52,7 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
         Route::post('changePassword', [UserController::class, 'changePassword'])->name('changePassword');
         Route::get('config', [ConfigController::class, 'config'])->name('config');
         Route::post('config', [ConfigController::class, 'updateConfig'])->name('config');
+        Route::post('change-maket-status', [ConfigController::class, 'changeMaketStatus'])->name('config');
     });
     // category
     Route::name('category.')->middleware('AdminLogin')->prefix('category/')->group(function () {
@@ -118,16 +119,16 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
 
     // voucher
     Route::name('voucher.')->middleware('AdminLogin')->prefix('voucher/')->group(function () {
-        Route::get('/', [SaleController::class, 'index'])->name('index')->middleware('can:XEM-LOAI-SAN-PHAM');
-        Route::get('create', [SaleController::class, 'create'])->name('create')->middleware('can:THEM-LOAI-SAN-PHAM');
-        Route::post('store', [SaleController::class, 'store'])->name('store')->middleware('can:THEM-LOAI-SAN-PHAM');
-        Route::get('edit/{id}', [SaleController::class, 'edit'])->name('edit')->middleware('can:SUA-LOAI-SAN-PHAM');
-        Route::post('update/{id}', [SaleController::class, 'update'])->name('update')->middleware('can:SUA-LOAI-SAN-PHAM');
-        Route::get('delete/{id}', [SaleController::class, 'delete'])->name('delete')->middleware('can:XOA-LOAI-SAN-PHAM');
+        Route::get('/', [SaleController::class, 'index'])->name('index')->middleware('can:XEM-VOUCHER');
+        Route::get('create', [SaleController::class, 'create'])->name('create')->middleware('can:THEM-VOUCHER');
+        Route::post('store', [SaleController::class, 'store'])->name('store')->middleware('can:THEM-VOUCHER');
+        Route::get('edit/{id}', [SaleController::class, 'edit'])->name('edit')->middleware('can:SUA-VOUCHER');
+        Route::post('update/{id}', [SaleController::class, 'update'])->name('update')->middleware('can:SUA-VOUCHER');
+        Route::get('delete/{id}', [SaleController::class, 'delete'])->name('delete')->middleware('can:XOA-VOUCHER');
     });
     //Seller
     Route::name('seller.')->middleware('AdminLogin')->prefix('seller/')->group(function () {
-        Route::get('', [UserController::class, 'getSeller'])->name('index')->middleware('can:XEM-NHAN-VIEN');
+        Route::get('', [UserController::class, 'getSeller'])->name('index')->middleware('can:XEM-SALLER');
     });
 
     Route::name('cate_blog.')->prefix('cate_blog/')->group(function () {

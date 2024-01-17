@@ -15,7 +15,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{route('cp-admin.dashboad')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Điều khiển</span></a>
+            <span>Thống kê</span></a>
     </li>
 
     <!-- Divider -->
@@ -25,36 +25,57 @@
     <div class="sidebar-heading">
         Hàng hóa
     </div>
-    <!-- Nav Item - Pages Collapse Menu -->
-    @if(Gate::check('XEM-LOAI-SAN-PHAM') || Gate::check('XEM-SAN-PHAM') || Gate::check('XEM-NHA-PHAN-PHOI'))
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-fw fa-list"></i>
-                <span>Sản phẩm</span>
-            </a>
-            <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    @can('XEM-LOAI-SAN-PHAM')
-                        <h6 class="collapse-header">Danh mục:</h6>
-                        <a class="collapse-item" href="{{route('cp-admin.category.index')}}">Danh mục sản phẩm</a>
-                    @endcan
-                    @can('XEM-SAN-PHAM')
-                        <h6 class="collapse-header"> Sản phẩm :</h6>
-                        <a class="collapse-item" href="{{route('cp-admin.products.index')}}">Danh sách sản phẩm</a>
-                    @endcan
-                    @can('XEM-SAN-PHAM')
-                    <h6 class="collapse-header"> Voucher :</h6>
-                    <a class="collapse-item" href="{{route('cp-admin.voucher.index')}}">Danh sách voucher</a>
-                @endcan
-                    @can('XEM-NHA-PHAN-PHOI')
-                        <h6 class="collapse-header"> Nhà phân phối :</h6>
-                        <a class="collapse-item" href="{{route('cp-admin.supplier.index')}}">Danh sách nhà phân phối</a>
-                    @endcan
-                </div>
-            </div>
+    @can('XEM-LOAI-SAN-PHAM')
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('cp-admin.category.index')}}">
+            <i class="far fa-circle nav-icon"></i>
+            <span>Loại sản phẩm</span></a>
+    </li>
+    @endcan
+    @can('XEM-SAN-PHAM')
+        <li class="nav-item active">
+            <a class="nav-link" href="{{route('cp-admin.products.index')}}">
+                <i class="far fa-circle nav-icon"></i>
+                <span>Sản phẩm</span></a>
         </li>
-    @endif
+    @endcan
+    @can('XEM-NHA-PHAN-PHOI')
+        <li class="nav-item active">
+            <a class="nav-link" href="{{route('cp-admin.supplier.index')}}">
+                <i class="far fa-circle nav-icon"></i>
+                <span>Nhà phân phối</span></a>
+        </li>
+    @endcan
+    <!-- Nav Item - Pages Collapse Menu -->
+{{--    @if(Gate::check('XEM-LOAI-SAN-PHAM') || Gate::check('XEM-SAN-PHAM') || Gate::check('XEM-NHA-PHAN-PHOI'))--}}
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"--}}
+{{--               aria-expanded="true" aria-controls="collapsePages">--}}
+{{--                <i class="fas fa-fw fa-list"></i>--}}
+{{--                <span>Sản phẩm</span>--}}
+{{--            </a>--}}
+{{--            <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">--}}
+{{--                <div class="bg-white py-2 collapse-inner rounded">--}}
+{{--                    @can('XEM-LOAI-SAN-PHAM')--}}
+{{--                        <h6 class="collapse-header">Danh mục:</h6>--}}
+{{--                        <a class="collapse-item" href="{{route('cp-admin.category.index')}}">Danh mục sản phẩm</a>--}}
+{{--                    @endcan--}}
+{{--                    @can('XEM-SAN-PHAM')--}}
+{{--                        <h6 class="collapse-header"> Sản phẩm :</h6>--}}
+{{--                        <a class="collapse-item" href="{{route('cp-admin.products.index')}}">Danh sách sản phẩm</a>--}}
+{{--                    @endcan--}}
+{{--                    @can('XEM-SAN-PHAM')--}}
+{{--                    <h6 class="collapse-header"> Voucher :</h6>--}}
+{{--                    <a class="collapse-item" href="{{route('cp-admin.voucher.index')}}">Danh sách voucher</a>--}}
+{{--                @endcan--}}
+{{--                    @can('XEM-NHA-PHAN-PHOI')--}}
+{{--                        <h6 class="collapse-header"> Nhà phân phối :</h6>--}}
+{{--                        <a class="collapse-item" href="{{route('cp-admin.supplier.index')}}">Danh sách nhà phân phối</a>--}}
+{{--                    @endcan--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </li>--}}
+{{--    @endif--}}
 <!-- Nav Item - Pages Collapse Menu -->
     @if(Gate::check('XEM-DON-HANG'))
         <li class="nav-item">
