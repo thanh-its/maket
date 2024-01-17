@@ -107,11 +107,17 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-6">
                 <div class="shoping__checkout">
+                    <form class="form-inline">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Thêm mã giảm giá" aria-label="Thêm mã giảm giá">
+                        <button class="btn btn-outline-success my-2 my-sm-0" >Add</button>
+                    </form> <br>
                     <h5>Tổng số giỏ hàng</h5>
                     <ul>
                         <li>Tạm tính <span>{{number_format(ceil($totalMoney), 0, ',', '.') . " VNĐ"}}</span></li>
+                        <li>Giảm giá <span>0</span></li>
                         <li>Tổng tiền <span>{{number_format(ceil($totalMoney), 0, ',', '.') . " VNĐ"}}</span></li>
                     </ul>
                     <a id="{{ $carts->count() <=0 ? 'checkout1' : 'checkout' }}" class="primary-btn">Mua hàng</a>
