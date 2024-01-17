@@ -1,5 +1,5 @@
 @extends('admin.master')
-@section('title', "Đơn hàng")
+@section('title', "Danh mục ")
 @section('style')
 <style>
     .sreach {
@@ -9,58 +9,68 @@
 @endsection
 @section('content')
 <div  class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Đơn hàng</h1>
+    <h1 class="h3 mb-0 text-gray-800">Danh mục sản phẩm</h1>
+    @can('THEM-LOAI-SAN-PHAM')
+    <a href="{{route('cp-admin.voucher.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"> Thêm danh mục</a>
+    @endcan
 </div>
 
 <div class="card shadow mb-4 ">
     <div class="card-header py-3">
-        <form name="fillter_cate" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
+        {{-- <form name="fillter_cate" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="" method="get">
             <div class="input-group">
             <input type="hidden" class="form-control bg-light border-0 small sreach" name="page" value="{{request('page') ? request('page') : '1' }}" aria-label="Search" aria-describedby="basic-addon2">
-                <input type="text" class="form-control bg-light border-0 small sreach" name="search" placeholder="Tìm danh mục liên hệ ..." value="{{request('search') ? request('search') : '' }}" aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control bg-light border-0 small sreach" name="search" placeholder="Tìm danh mục sản phẩm ..." value="{{request('search') ? request('search') : '' }}" aria-label="Search" aria-describedby="basic-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-primary" id="fillter_cate" type="btn">
                         <i class="fas fa-search fa-sm"></i>
                     </button>
                 </div>
             </div>
-        </form>
+        </form> --}}
     </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                    <th>ID</th>
-                        <th>Sản phẩm </th>
-                        <th>Giá </th>
+                        <th>ID</th>
+                        <th>Mã</th>
+                        <th>Sô lượng</th>
+                        <th>Giảm (%)</th>
+                        <th>Ngày hoạt động</th>
                         <th>Trạng thái</th>
-                        <th>Thời gian đặt</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tfoot>
-                <th>ID</th>
-                <th>Sản phẩm </th>
-                <th>Giá </th>
-                <th>Trạng thái</th>
-                <th>Thời gian đặt</th>
-                <th>Hành động</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Mã</th>
+                        <th>Sô lượng</th>
+                        <th>Giảm (%)</th>
+                        <th>Ngày hoạt động</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
                 </tfoot>
                 <tbody>
-                    @foreach( $Orders as $Order)
-                    <tr id="cate{{ $Order->id }}">
-                    <td>{{ $Order->id }}</td>
-                        <td>{{ $Order->name }}</td>
-                        <td> {{ number_format($Order->price, 0, ',', '.') . " VNĐ"   }}</td>
-                        <td>{{ App\Common\Constants::STATUS_ORDER[$Order->status] }}</td>
-                        <td>{{ $Order->created_at }}</td>
+                    @foreach( $sales as $sale)
+                    <tr id="cate{{ $sale->id }}">
+                        <td>{{ $sale->id }}</td>
+                        <td>{{ $sale->code }}</td>
+                        <td>{{ $sale->number_sale }}</td>
+                        <td>{{ $sale->discount_percent }}</td>
+                        <td>{{ $sale->time_start }} - {{ $sale->time_end }} </td>
+                        
+                            <td><span style="" class="btn {{$sale->active== 1 ?'btn-primary':'btn-danger'}} w-100">{{ $sale->active == 1 ? "Hoat động" : "Tạm ngưng" }}</span></td>
                         <td>
-                        @can('SUA-DON-HANG')
-                            <a href="{{route('cp-admin.orders.edit',[ 'id' => $Order->order_id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
+                        @can('SUA-LOAI-SAN-PHAM')
+                            <a href="{{route('cp-admin.voucher.edit',[ 'id' => $sale->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
                             @endcan
-                            {{-- <a class="btn-lg" onclick="deleteCate({{ $contact->id}})"><i class="fas fa-trash"></i></a> --}}
+                            @can('XOA-LOAI-SAN-PHAM')
+                            <a class="btn-lg" onclick="deleteCate({{ $sale->id}})"><i class="fas fa-trash"></i></a>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach
@@ -69,7 +79,7 @@
         </div>
     </div>
     <div class="card-header py-3">
-        {!! $Orders->links('pagination::bootstrap-4') !!}
+        {!! $sales->links('pagination::bootstrap-4') !!}
     </div>
 </div>
 
@@ -84,7 +94,7 @@
 @endif
 <script>
     function deleteCate(id) {
-        const url = '/cp-admin/cate_blog/delete/' + id;
+        const url = '/cp-admin/voucher/delete/' + id;
         swal({
                 title: "Bạn có chắc không?",
                 text: "Sau khi bị xóa, bạn sẽ không thể khôi phục tệp này! ",

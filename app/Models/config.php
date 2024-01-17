@@ -17,6 +17,7 @@ class config extends Model
         'link_linkedin',
         'phone',
         'address',
-        'email'
+        'email',
+        'market_status'
     ];
 }

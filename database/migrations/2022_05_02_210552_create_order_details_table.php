@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('status')->default(0);
             $table->string('slug');
             $table->double('price');
             $table->integer('quantity');
+            $table->foreignId('users_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('order_id')->constrained('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

@@ -14,11 +14,17 @@
                                 <th>Sản phẩm</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
+                                <th>Trạng thái</th>
                                 <th>Số tiền</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
+                        @php $totalPrice = 0; @endphp
                         <tbody>
                             @foreach($Orders->order_detail as $Order)
+                                @if($Order->status != 6)
+                                    @php $totalPrice += $Order->price * $Order->quantity;  @endphp
+                                    @endif
                             <tr>
                                 <td>
                                     <img src="img/cart/cart-1.jpg" alt="">
@@ -31,9 +37,17 @@
                                     <h5> {{$Order->quantity}}</h5>
                                 </td>
                                 <td>
+
+                                    <h5> {{ App\Common\Constants::STATUS_ORDER[$Order->status] }}</h5>
+                                </td>
+                                <td>
                                     <h5> {{ number_format($Order->price * $Order->quantity, 0, ',', '.') . " VNĐ"   }}</h5>
                                 </td>
-
+                                @if($Order->status < 2)
+                                <td>
+                                    <button type="button" class="btn btn-warning" onclick="cancelProduct({{$Order->id}})">Hủy sản phẩm</button>
+                                </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -44,7 +58,7 @@
                 <div class="shoping__checkout">
                     <h5>Hóa đơn</h5>
                     <ul>
-                        <li>Tổng tiền thanh toán <span>{{ number_format($totalMoney, 0, ',', '.') . " VNĐ"   }}</span></li>
+                        <li>Tổng tiền thanh toán <span>{{ number_format($totalPrice, 0, ',', '.') . " VNĐ"   }}</span></li>
                         <li>Phương thức thanh toán <span>Thanh toán khi nhân hàng</span></li>
                         <li>Trạng thái <span>{{ App\Common\Constants::STATUS_ORDER[$Orders->status] }}</span></li>
                     </ul>
@@ -62,8 +76,7 @@
                 </div>
             </div>
         </div>
-
-       
+        @csrf
     </div>
 </section>
 <!-- Shoping Cart Section End -->
@@ -73,6 +86,45 @@
 
 @section('javascript')
 <script>
+    function cancelProduct(id) {
+        const url = '/api/orders/update/' + id;
+        let status = 6;
+        let _token = $("input[name=_token]").val();
+        let data = { status, _token };
+        swal({
+            title: "Bạn có chắc không?",
+            text: " ",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: data,
+                        success: function(res) {
+                            console.log(res.status)
+                            if (res.status == 200) {
+                                swal("Tệp của bạn đã được thay đổi!", {
+                                    icon: "success",
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else if (res.status == 401) {
+                                swal(res.message, {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+
+                } else {
+                    swal("Tệp của bạn an toàn!!");
+                }
+            });
+    }
     $("#submit-updateCarts").on("click", function(e) {
         $("form[name='updateCarts']").trigger("submit");
     });

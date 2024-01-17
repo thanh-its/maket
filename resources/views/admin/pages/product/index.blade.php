@@ -22,13 +22,13 @@
                 <input type="hidden" class="form-control bg-light border-0 small sreach" name="page" value="{{request('page') ? request('page') : '1' }}" aria-label="Search" aria-describedby="basic-addon2">
                 <div class="d-flex justify-content-between w-100">
                     <input type="text" class="form-control bg-light border-0 small sreach m-2" name="search" placeholder="Tìm danh sách sản phẩm ..." value="{{request('search') ? request('search') : '' }}" aria-label="Search" aria-describedby="basic-addon2">
-                    <select id="inputState" name="category_id" class="form-control m-2">   
+                    <select id="inputState" name="category_id" class="form-control m-2">
                         <option value=""  {{request("category_id") ? "selected" : "" }}>Tất cả loại sản phẩm...</option>
                         @foreach($categoryAll as $category)
                         <option value="{{$category->id}}" {{request("category_id") == $category->id ? "selected" : "" }}>{{$category->nameCate }}</option>
                         @endforeach
                     </select>
-                    <select id="inputState" name="supplier_id" class="form-control m-2">   
+                    <select id="inputState" name="supplier_id" class="form-control m-2">
                         <option  value="" {{request("supplier_id") ? "selected" : "" }}>Tất cả nhà phân phối...</option>
                         @foreach($supplier as $suppliers)
                         <option value="{{$suppliers->id}}" {{request("supplier_id") == $suppliers->id ? "selected" : "" }}>{{$suppliers->nameSupplier }}</option>
@@ -62,10 +62,10 @@
                         <th>Tên sản phẩm</th>
                         <th>Thuộc loại</th>
                         <th>Nhà cung cấp</th>
-                        <th>Trạng thái</th>
-                        <th>Người tạo</th>
-                        <th>Xuất xứ</th>
+                        <th>Giá nhập</th>
+                        <th>Giá bán</th>
                         <th>Sô lượng</th>
+                        <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -75,10 +75,10 @@
                         <th>Tên sản phẩm</th>
                         <th>Thuộc loại</th>
                         <th>Nhà cung cấp</th>
-                        <th>Trạng thái</th>
-                        <th>Người tạo</th>
-                        <th>Xuất xứ</th>
+                        <th>Giá nhập</th>
+                        <th>Giá bán</th>
                         <th>Sô lượng</th>
+                        <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                 </tfoot>
@@ -89,10 +89,10 @@
                         <td>{{ $product->namePro }}</td>
                         <td>{{ $product->category->nameCate }}</td>
                         <td>{{ $product->supplier->nameSupplier }}</td>
-                        <td><span style="" class="btn {{$product->status==1?'btn-primary':'btn-danger'}} w-100">{{ App\Common\Constants::STATUS_PRODUCTS[$product->status] }}</span></td>
-                        <td>{{ $product->User->username }}</td>
-                        <td>{{ $product->origin->name }}</td>
+                        <td>{{ number_format($product->cost, 0, ',', '.') . " VNĐ" }}</td>
+                        <td>{{ number_format($product->price, 0, ',', '.') . " VNĐ" }}</td>
                         <td>{{ $product->quantity }}</td>
+                        <td><span style="" class="btn {{$product->status==1?'btn-primary':'btn-danger'}} w-100">{{ App\Common\Constants::STATUS_PRODUCTS[$product->status] }}</span></td>
                         <td>
                         @can('SUA-SAN-PHAM')
                             <a href="{{route('cp-admin.products.edit',[ 'id' => $product->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>

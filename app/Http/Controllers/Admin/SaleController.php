@@ -4,84 +4,96 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Sale;
+use App\Models\Product;
 
 class SaleController extends Controller
 {
-    public function getDanhSach()
+    public function index()
     {
-        $sale = Sale::all();
-        return view('admin.layout.sale.list',['sale'=>$sale]);
+        $sales = Sale::where('users_id', auth()->user()->id)
+        ->orderBy('id', 'DESC')
+        ->Paginate(7);
+        return view('admin.pages.voucher.index', compact('sales'));
     }
 
-    public function getSua($id)
+    public function create()
     {
-        $sale = Sale::find($id);
-        return view('admin/layout/sale/edit',['sale'=>$sale]);
+        $products = Product::where('users_id', auth()->user()->id)->get();
+
+        return view('admin.pages.voucher.create', compact('products'));
+    }
+    public function formatdateTime($time)
+    {
+        $carbonInstance = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $time);
+
+        // Format the Carbon instance as needed
+        $formattedDateTime = $carbonInstance->format('Y-m-d H:i:s');
+        return $formattedDateTime;
     }
 
-    public function postSua(Request $request,$id)
+    public function store(Request $request)
     { 
+ 
+        $data = $request->all();
         $this->validate($request,[
-            'txtNumberSale' => 'required',
-            'txtDiscount' => 'required',
-            'txtStart' => 'required',
-            'txtFinish' => 'required',
+            'code' => 'required|string|unique:sales',
+            'products_id' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'active' => 'required|numeric',
+            'number_sale' => 'required|numeric',
+            'discount_percent' => 'required|numeric',
 
-        ],
-        [
-            'txtNumberSale.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtDiscount.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtStart.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtFinish.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
+        ]);
+       $data['time_start'] = $this->formatdateTime($data['time_start']);
+       $data['time_end'] = $this->formatdateTime($data['time_end']);
+       $data['products_id'] = json_encode($data['products_id']);
+       $data['users_id'] = auth()->user()->id;
+       Sale::create($data);
+        return redirect()->route('cp-admin.voucher.index')->with('message', 'Thêm mã giảm giá thành công  !');
+
+    }
+
+    public function edit($id)
+    {
+        $products = Product::where('users_id', auth()->user()->id)->get();
+        $sales = Sale::find($id);
+        return view('admin.pages.voucher.edit', compact('sales','products'));
+    }
+
+    public function update(Request $request,$id)
+    {
+        $sales = Sale::find($id);
+        $data = $request->all();
+        $this->validate($request,[
+            'code' => 'required|string|unique:sales,code,' .  $sales->id,
+            'products_id' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'active' => 'required|numeric',
+            'number_sale' => 'required|numeric',
+            'discount_percent' => 'required|numeric',
+
         ]);
 
-        $sale = Sale::find($id);
-        $sale->number_sale = $request->txtNumberSale;
-        $sale->discount_percent = $request->txtDiscount;
-        $sale->active = $request->active;
-        $sale->time_start = $request->txtStart;
-        $sale->time_end = $request->txtFinish;
-        $sale->save();
-        return redirect('admin/sale/edit/'.$id)->with('thongbao','Sửa thành công!!!!');
+        $data['time_start'] = $this->formatdateTime($data['time_start']);
+        $data['time_end'] = $this->formatdateTime($data['time_end']);
+        $data['products_id'] = json_encode($data['products_id']);
+        $data['users_id'] = auth()->user()->id;
+        $sales->update($data);
+         return redirect()->route('cp-admin.voucher.index')->with('message', 'Cập nhật mã giảm giá thành công  !');
+ 
     }
 
-    public function getThem()
-    {
-        return view('admin.layout.sale.add');
-    }
-
-    public function postThem(Request $request)
-    {
-        $this->validate($request,[
-            'txtNumberSale' => 'required',
-            'txtDiscount' => 'required',
-            'txtStart' => 'required',
-            'txtFinish' => 'required',
-
-        ],
-        [
-            'txtNumberSale.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtDiscount.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtStart.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-            'txtFinish.required' => 'Bạn chưa nhập số lượng sale của sản phẩm',
-        ]);
-
-        $sale = new Sale;
-        $sale->number_sale = $request->txtNumberSale;
-        $sale->discount_percent = $request->txtDiscount;
-        $sale->active = $request->active;
-        $sale->time_start = $request->txtStart;
-        $sale->time_end = $request->txtFinish;
-        $sale->save();
-        return redirect('admin/sale/add')->with('thongbao','Thêm thành công!!!');
-    }
-
-    public function getXoa($id)
+    public function delete($id)
     {
         $sale = Sale::find($id);
         $sale->delete();
         
-        return redirect('admin/sale/list')->with('thongbao','Xóa thành công!!!');
+        return response()->json([
+            'message' => "Xóa danh mục thành công",
+            'status' => "200"
+        ]);
     }
 
 }
