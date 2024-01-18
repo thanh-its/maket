@@ -23,11 +23,17 @@ class ProductController extends Controller
         $supplier = Supplier::all();
         $categoryAll = Category::all();
         $origin = Origin::all();
-        $products = Product::filter(request(['search','category_id','supplier_id','origin_id','status']))->orderBy('id', 'DESC')->Paginate(7);
+        $products = Product::filter(request(['search','category_id','supplier_id','origin_id','status']))
+            ->when(auth()->user()->role_id == 3, function ($query) {
+                return $query->where('users_id', auth()->user()->id);
+            })
+            ->orderBy('id', 'DESC')
+            ->Paginate(7);
         $products->load('category'); // gọi products bên model
         $products->load('supplier');
         $products->load('origin');
         $products->load('User');
+
         return view('admin.pages.product.index', compact('products','supplier', 'categoryAll', 'origin'));
     }
     public function create()
@@ -43,7 +49,7 @@ class ProductController extends Controller
         $pathAvatar = str_replace("public/", "", $pathAvatar);
         try {
             DB::beginTransaction();
-            $data = request(['namePro', 'quantity', 'slug', 'price', 'discounts', 'Description', 'status', 'category_id', 'supplier_id', 'origin_id']);
+            $data = request(['namePro', 'quantity', 'slug', 'price', 'discounts', 'Description', 'status', 'category_id', 'supplier_id', 'origin_id','cost']);
             $data['users_id'] = auth()->user()->id;
             $data['image'] = $pathAvatar;
             Product::create($data);
@@ -125,7 +131,7 @@ class ProductController extends Controller
     public function delete($id)
     {
         $Product = Product::find($id);
-        
+
         if ($Product) {
             if (file_exists('storage/' . $Product->image)) {
                 unlink('storage/' . $Product->image);

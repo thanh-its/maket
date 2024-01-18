@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\OrderDetail;
 use App\Models\Order;
 class OrderContrller extends Controller
 {
     public function index(Request $request)
     {
-        
-        $Orders = Order::filter(request(['status']))->orderBy('id', 'DESC')->Paginate(30);
+
+        $Orders = OrderDetail::where('users_id', auth()->user()->id)->orderBy('id', 'DESC')->Paginate(30);
         return view('admin.pages.orders.index', compact('Orders'));
     }
-    
+
     public function edit($id)
     {
         $Orders = Order::where('id', $id)->first();
@@ -33,11 +34,7 @@ class OrderContrller extends Controller
     }
 
     public function update(Request $request ,$id)
-    {   
-        $Orders = Order::where('id', $id)->first();
-        if(!$Orders){
-            return redirect()->back();
-        }
+    {
         $this->validate(request(),[
             'status' => 'required|integer|min:0',
         ],
@@ -46,7 +43,14 @@ class OrderContrller extends Controller
             'status.integer' => 'Trạng thái Không hợp lệ',
             'status.min'=>'Trạng thái Không hợp lệ',
         ]);
+        $Orders = OrderDetail::where('id', $id)->first();
+        if(!$Orders){
+            return redirect()->back();
+        }
         $Orders->update($request->all());
-        return redirect()->route('cp-admin.orders.index')->with('message', 'Cập nhật trạng thái thành công !');;
+        return response()->json([
+            'message' => "Cập nhật trạng thái thành công",
+            'status' => "200"
+        ]);
     }
 }

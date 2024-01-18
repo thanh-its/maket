@@ -35,7 +35,7 @@ class ConfigController extends Controller
             'address.max'=>'Địa chỉ phải có Độ dài  từ 3 đến 200 ký tự',
         ]);
         if ($request->file('logo') != null) {
-          
+
             if (!empty($config->logo) && file_exists('storage/' . $config->logo)) {
                 unlink('storage/' . $config->logo);
             }
@@ -56,5 +56,17 @@ class ConfigController extends Controller
        // dd($config);
        return redirect()->back()->with('message', 'Cập nhật thông tin thành công');
      }
-    
+
+    public function changeMaketStatus(Request $request){
+        $config= config::first();
+        $this->validate(request(),[
+            'market_status' => 'required|numeric|min:0|max:1'
+        ]);
+        $data = request(['market_status']);
+        $config->update($data);
+        return response()->json([
+            'message' => "Cập nhật trạng thái chợ thành công ",
+            'status' => "200"
+        ]);
+    }
 }

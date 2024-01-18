@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('link_twitter')->nullable();
             $table->string('link_linkedin')->nullable();
             $table->string('phone');
+            $table->string('market_status')->default(0);
             $table->string('address');
             $table->string('email');
             $table->timestamps();

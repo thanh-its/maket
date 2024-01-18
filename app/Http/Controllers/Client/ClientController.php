@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\config;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
@@ -108,6 +109,13 @@ class ClientController extends Controller
     }
     public function addCart(Request $request, $product_id)
     {
+        $config= config::first();
+        if($config->market_status == 0){
+            return response()->json([
+                'message' => "Xin lỗi phiên chợ đã đóng ",
+                'status' => "error"
+            ]);
+        }
         $Product = Product::where('id', $product_id)->where('status', 1)->first();
         if($Product->quantity <= 0){
             return response()->json([
@@ -116,13 +124,13 @@ class ClientController extends Controller
             ]);
         }
         $quantity = request(['quantity']) ? (int)request()->quantity : 1;
-        if (!$Product) { // kiểm tra xem sản phẩm có tồn tại 
+        if (!$Product) { // kiểm tra xem sản phẩm có tồn tại
             return response()->json([
                 'message' => "Không tìm thấy sản phẩm",
                 'status' => "error"
             ], $status = 401);
         }
-        if ($Product->quantity < (int)request()->quantity) { // kiểm tra xem sản phẩm còn đủ số lượng hàng để mua 
+        if ($Product->quantity < (int)request()->quantity) { // kiểm tra xem sản phẩm còn đủ số lượng hàng để mua
             return response()->json([
                 'message' => "Sản phẩm hiện tại không còn đủ so với số lượng mua yêu cầu",
                 'status' => "error"
@@ -197,6 +205,7 @@ class ClientController extends Controller
             $data['price'] = ceil($cart->products->price - (($cart->products->price * $cart->products->discounts) / 100));
             $data['quantity'] = $cart->quantity;
             $data['order_id'] = $order->id;
+            $data['users_id'] = $cart->products->users_id;
             OrderDetail::create($data);
             $cart->delete();
         }

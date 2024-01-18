@@ -4,15 +4,20 @@
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
 </button>
-
+@can('XEM-MAKET')
 <!-- Topbar Search -->
-
-
+    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        @csrf
+        <div class="input-group">
+            <select class="form-control custom-select" id="maketStatus" onchange="changeMaketStatus()">
+                <option value="1" {{ $config->market_status == 1 ? "selected" : "" }}>Mở chợ</option>
+                <option value="0" {{ $config->market_status == 0 ? "selected" : "" }}>Đóng chợ</option>
+            </select>
+        </div>
+    </form>
+@endcan
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
-
-  
-
     <div class="topbar-divider d-none d-sm-block"></div>
 
     <!-- Nav Item - User Information -->
@@ -49,3 +54,44 @@
 </ul>
 
 </nav>
+<script>
+    @can('SUA-MAKET')
+    function changeMaketStatus() {
+        const url = '/cp-admin/change-maket-status';
+        let market_status = $("#maketStatus").val();
+        let _token = $("input[name=_token]").val();
+        let data = { market_status, _token };
+        swal({
+            title: "Bạn có chắc không?",
+            text: " ",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: data,
+                        success: function(res) {
+                            console.log(res.status)
+                            if (res.status == 200) {
+                                swal("Tệp của bạn đã được thay đổi!", {
+                                    icon: "success",
+                                });
+                            } else if (res.status == 401) {
+                                swal(res.message, {
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+
+                } else {
+                    swal("Tệp của bạn an toàn!!");
+                }
+            });
+    }
+    @endcan
+</script>

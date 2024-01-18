@@ -11,6 +11,13 @@ class Sale extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'sales';
     protected $fillable = [
-        'number_sale', 'discount_percent', 'active', 'time_start', 'time_end'
+        'number_sale',
+        'code',
+        'discount_percent',
+        'products_id',
+        'users_id',
+        'active',
+        'time_start',
+        'time_end'
     ];
 }

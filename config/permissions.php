@@ -49,6 +49,22 @@ return [
             "name" => 'Bài viết',
             "desc" => 'Bài viết'
         ],
+        [
+            "name" => 'Voucher',
+            "desc" => 'Mã giảm giá'
+        ],
+        [
+            "name" => 'Saller',
+            "desc" => 'Người bán hàng'
+        ],
+        [
+            "name" => 'config',
+            "desc" => 'Cấu hình'
+        ],
+        [
+            "name" => 'maket',
+            "desc" => 'chợ'
+        ],
 
     ],
     'action' => [

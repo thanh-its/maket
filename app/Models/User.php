@@ -52,7 +52,11 @@ class User extends Authenticatable
     ];
     public function order()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'users_id');
+    }
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'users_id');
     }
     public function blogs()
     {
@@ -75,7 +79,7 @@ class User extends Authenticatable
         return $this->belongsTo(Roles::class,'role_id');
     }
     public function scopeFilter($query, array $filters)
-    { 
+    {
         $query->when($filters['group_user'] ?? false, function ($query, $group_user) {
             $query->where('group_user', $group_user);
         });
@@ -85,7 +89,7 @@ class User extends Authenticatable
         $query->when($filters['status'] ?? false, function ($query, $status) {
             if($status==2|| $status==1 ){
                 $status = $status==2 ? 0 : 1;
-               $query->where('status', $status);  
+               $query->where('status', $status);
             }
         });
         $query->when($filters['search'] ?? false, function ($query, $search) {

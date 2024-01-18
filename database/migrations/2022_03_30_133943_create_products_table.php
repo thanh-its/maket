@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('image');
             $table->integer('quantity');
             $table->double('price');
+            $table->double('cost');
             $table->string('status');
             $table->double('discounts')->default(0);
             $table->string('slug')->unique();
