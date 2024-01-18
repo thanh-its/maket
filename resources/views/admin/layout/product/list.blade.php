@@ -19,7 +19,7 @@
                 </form> --}}
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
-                        <tr align="center">
+                        <tr class="center">
                             <th>ID</th>
                             <th>Supplier's name</th>
                             <th>Category's name</th>

@@ -66,22 +66,9 @@
                         <th>Người tạo</th>
                         <th>Xuất xứ</th>
                         <th>Sô lượng</th>
-                        <th>Hành động</th>
+                        <th class="text-center">Hành động</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Thuộc loại</th>
-                        <th>Nhà cung cấp</th>
-                        <th>Trạng thái</th>
-                        <th>Người tạo</th>
-                        <th>Xuất xứ</th>
-                        <th>Sô lượng</th>
-                        <th>Hành động</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     @foreach( $products as $product)
                     <tr id="pro{{ $product->id }}">
@@ -96,10 +83,11 @@
                         <td>
                         @can('SUA-SAN-PHAM')
                             <a href="{{route('cp-admin.products.edit',[ 'id' => $product->id ])}}" class="btn-lg"><i class="fas fa-pencil-alt"></i></a>
-                            @endcan
-                            @can('XOA-SAN-PHAM')
+                        @endcan
+                        @can('XOA-SAN-PHAM')
                             <a class="btn-lg" onclick="deleteCate({{ $product->id}})"><i class="fas fa-trash"></i></a>
-                            @endcan
+                        @endcan
+                            <a class="btn-lg"  href="{{route('cp-admin.products.addVariant',[ 'id' => $product->id ])}}"><i class="fa-solid fa-plus"></i></a>
                         </td>
                     </tr>
                     @endforeach

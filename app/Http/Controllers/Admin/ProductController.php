@@ -141,4 +141,7 @@ class ProductController extends Controller
             'status' => "401"
         ]);
     }
+    public function addVariant($id){
+        return view('admin.pages.product.variant', compact('id'));
+    }
 }

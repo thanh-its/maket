@@ -72,7 +72,6 @@
                       <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
                           class="link-danger">Register</a></p>
                     </div>
-          
                   </form>
                 </div>
                 <div class="col-md-3"></div>

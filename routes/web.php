@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CategoriBlogController;
 use App\Http\Controllers\Admin\ContactContrller;
 use App\Http\Controllers\Admin\OrderContrller;
+use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\BlogsController;
 use App\Http\Controllers\Admin\SessionController as AdminSessionController;
 use App\Http\Controllers\RegisteredStoreController;
@@ -69,6 +70,13 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit')->middleware('can:SUA-SAN-PHAM');
         Route::post('update/{id}', [ProductController::class, 'update'])->name('update')->middleware('can:SUA-SAN-PHAM');
         Route::get('delete/{id}', [ProductController::class, 'delete'])->name('delete')->middleware('can:XOA-SAN-PHAM');
+        Route::get('add-variant/{id}', [ProductController::class, 'addVariant'])->name('addVariant');
+    });
+    // Biến thể
+    Route::name('variant.')->middleware('AdminLogin')->prefix('variant/')->group(function () {
+        Route::get('/', [VariantController::class, 'index'])->name('index');
+        Route::post('/create', [VariantController::class, 'create'])->name('create');
+        Route::get('/delete/{id}', [VariantController::class, 'delete'])->name('delete');
     });
     // Nhà cung câp
     Route::name('supplier.')->middleware('AdminLogin')->prefix('supplier/')->group(function () {
