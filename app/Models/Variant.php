@@ -10,4 +10,9 @@ class Variant extends Model
     use HasFactory;
     protected $table = 'variants';
     protected $fillable = ['name','value','type','color','parent_id', 'user_id'];
+
+    public function children()
+    {
+        return $this->hasMany(Variant::class, 'parent_id', 'id');
+    }
 }

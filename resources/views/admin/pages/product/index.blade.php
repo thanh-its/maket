@@ -92,7 +92,6 @@
                     @endforeach
                 </tbody>
             </table>
-
         </div>
     </div>
     <div class="card-header py-3">

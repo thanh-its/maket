@@ -79,6 +79,8 @@ Route::name('cp-admin.')->middleware('AdminLogin')->prefix('cp-admin/')->group(f
         Route::get('/', [VariantController::class, 'index'])->name('index');
         Route::post('/create', [VariantController::class, 'create'])->name('create');
         Route::get('/delete/{id}', [VariantController::class, 'delete'])->name('delete');
+        Route::get('/edit/{id}', [VariantController::class, 'edit'])->name('edit');
+        Route::post('/update', [VariantController::class, 'update'])->name('update');
     });
     // Nhà cung câp
     Route::name('supplier.')->middleware('AdminLogin')->prefix('supplier/')->group(function () {
